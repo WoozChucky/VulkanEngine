@@ -61,13 +61,24 @@ if(ParentDirectory STREQUAL "")
     include(FindPkgConfig) # <-- include pkg-config needed by FindLibreSSL.cmake script
 
     add_subdirectory(rabbitmq-c)
-    add_subdirectory(SDL)
+    add_subdirectory(deps/glm)
+    add_subdirectory(deps/glfw)
 
     list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
+
+    include_directories(C:\\VulkanSDK\\1.2.198.1\\Include)
+    include_directories(deps/glm)
+    include_directories(deps/glfw/include)
 
     add_subdirectory(Abstractions)
     add_subdirectory(AMQP)
     add_subdirectory(Engine)
     add_subdirectory(Game)
+
+    #add_custom_command(
+    #        TARGET ${This} PRE_BUILD
+    #        COMMAND ${CMAKE_COMMAND} -E copy
+    #        ${CMAKE_SOURCE_DIR}/Libs/apex/Documentation/TML_API-APEX_Interface_v1.0.0.pdf
+    #        ${CMAKE_CURRENT_BINARY_DIR}/bin/TML_API-APEX_Interface_v1.0.0.pdf)
 
 endif(ParentDirectory STREQUAL "")

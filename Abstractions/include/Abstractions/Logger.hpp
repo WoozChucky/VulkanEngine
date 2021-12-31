@@ -117,7 +117,7 @@ class DefaultLogger : public Logger {
 	 */
 	DefaultLogger(const Config& config = Config(
 		"%Y-%m-%d %H:%M:%S",
-		true,
+		false,
 		(1 << PRIORITY_V) | (1 << PRIORITY_D) | (1 << PRIORITY_I) | (1 << PRIORITY_W) | (1 << PRIORITY_E)
 	));
 

@@ -19,30 +19,30 @@ DefaultLogger::DefaultLogger(const Config& config)
 
 void DefaultLogger::log(U32 priority, const std::string& tag, const std::string& message) {
 
-	bool indent = false;
+	bool indent = true;
 	auto time = std::chrono::system_clock::now().time_since_epoch();
 
 	std::lock_guard<std::mutex> lock(m_lock);
 
 	switch (priority) {
 		case PRIORITY_V:
-			std::cout << "\033[0;0m V \033[0m|";
+			std::cout << "[ V |";
 			break;
 
 		case PRIORITY_D:
-			std::cout << "\033[34;0m D \033[0m|";
+			std::cout << "[ D |";
 			break;
 
 		case PRIORITY_I:
-			std::cout << "\033[32;0m I \033[0m|";
+			std::cout << "[ I |";
 			break;
 
 		case PRIORITY_W:
-			std::cout << "\033[45;0m W \033[0m|";
+			std::cout << "[ W |";
 			break;
 
 		case PRIORITY_E:
-			std::cout << "\033[41;0m E \033[0m|";
+			std::cout << "[ E |";
 			break;
 
 		default:

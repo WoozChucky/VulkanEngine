@@ -8,14 +8,12 @@
 
 bool IOManager::readFileToBuffer(const std::string &filePath, std::vector<U8> &buffer) {
 
-	std::ifstream file(filePath, std::ios::binary);
+	std::ifstream file(filePath, std::ios::ate | std::ios::binary);
 
 	if (file.fail()) {
 		LOGW(__FUNCTION__, "Failed to open file %s. %s", filePath.c_str(), strerror(errno))
 		return false;
 	}
-
-	file.seekg(0, std::ios::end);
 
 	S64 fileSize = file.tellg();
 

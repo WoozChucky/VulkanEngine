@@ -54,7 +54,7 @@ void Environment::destroy(int flag){
 		throw std::runtime_error("[Environment::destroy()]: Error. Invalid state. Leaking components");
 	}
 	m_logger.reset();
-	if (flag == -1) {
+	if (flag == EXIT_FAILURE) {
 		exit(EXIT_FAILURE);
 	}
 }
