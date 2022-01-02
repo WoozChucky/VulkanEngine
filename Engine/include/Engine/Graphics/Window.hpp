@@ -11,7 +11,7 @@
 #include <Abstractions/DataTypes.hpp>
 #include <string>
 
-namespace nl {
+namespace nl::gfx {
 
 class Window {
 
@@ -26,6 +26,7 @@ class Window {
 	inline VkExtent2D getExtent() { return { static_cast<U32>(width), static_cast<U32>(height)}; }
 	inline bool wasWindowResized() { return _frameBufferResized; }
 	inline void resetWindowResized() { _frameBufferResized = false; }
+	inline GLFWwindow * getGLFWwindow() const { return _window; };
 
 	void createWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
 

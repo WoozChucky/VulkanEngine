@@ -2,7 +2,7 @@
 set(This Engine)
 
 set(Headers
-        include/Engine/Input/IOManager.hpp
+        # Graphics headers
         include/Engine/Graphics/Window.hpp
         include/Engine/Graphics/Pipeline.hpp
         include/Engine/Graphics/Device.hpp
@@ -11,10 +11,13 @@ set(Headers
         include/Engine/Graphics/GameObject.hpp
         include/Engine/Graphics/Renderer.hpp
         include/Engine/Graphics/SimpleRenderSystem.hpp
+        include/Engine/Graphics/Camera.hpp
+        # Input headers
+        include/Engine/Input/IOManager.hpp
+        include/Engine/Input/KeyboardMovementController.hpp
         )
 
 set(Sources
-        src/Input/IOManager.cpp
         src/Graphics/Window.cpp
         src/Graphics/Pipeline.cpp
         src/Graphics/Device.cpp
@@ -23,6 +26,10 @@ set(Sources
         src/Graphics/GameObject.cpp
         src/Graphics/Renderer.cpp
         src/Graphics/SimpleRenderSystem.cpp
+        src/Graphics/Camera.cpp
+
+        src/Input/IOManager.cpp
+        src/Input/KeyboardMovementController.cpp
         )
 
 include_directories(../Abstractions)

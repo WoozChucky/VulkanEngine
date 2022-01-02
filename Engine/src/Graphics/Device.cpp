@@ -7,7 +7,7 @@
 #include <set>
 #include <unordered_set>
 
-namespace nl {
+namespace nl::gfx {
 
 // local callback functions
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(

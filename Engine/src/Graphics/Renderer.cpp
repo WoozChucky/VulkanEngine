@@ -7,16 +7,18 @@
 #include <stdexcept>
 #include <array>
 
-nl::Renderer::Renderer(Window &window, Device &device) : _window{window}, _device{device} {
+using namespace nl::gfx;
+
+Renderer::Renderer(Window &window, Device &device) : _window{window}, _device{device} {
 	recreateSwapChain();
 	createCommandBuffers();
 }
 
-nl::Renderer::~Renderer() {
+Renderer::~Renderer() {
 	freeCommandBuffers();
 }
 
-void nl::Renderer::recreateSwapChain() {
+void Renderer::recreateSwapChain() {
 	auto extent = _window.getExtent();
 	while (extent.width == 0 || extent.height == 0) {
 		extent = _window.getExtent();
@@ -28,17 +30,19 @@ void nl::Renderer::recreateSwapChain() {
 	if (_swapChain == nullptr) {
 		_swapChain = std::make_unique<SwapChain>(_device, extent);
 	} else {
-		_swapChain = std::make_unique<SwapChain>(_device, extent, std::move(_swapChain));
-		if (_swapChain->imageCount() != _commandBuffers.size()) {
-			freeCommandBuffers();
-			createCommandBuffers();
+		std::shared_ptr<SwapChain> oldSwapChain = std::move(_swapChain);
+
+		_swapChain = std::make_unique<SwapChain>(_device, extent, oldSwapChain);
+
+		if (!oldSwapChain->compareSwapFormats(*_swapChain.get())) {
+			throw std::runtime_error("SwapChain image(or depth) format has changed");
 		}
 	}
 }
 
-void nl::Renderer::createCommandBuffers() {
+void Renderer::createCommandBuffers() {
 
-	_commandBuffers.resize(_swapChain->imageCount());
+	_commandBuffers.resize(SwapChain::MAX_FRAMES_IN_FLIGHT);
 
 	VkCommandBufferAllocateInfo allocInfo{};
 	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -51,7 +55,7 @@ void nl::Renderer::createCommandBuffers() {
 	}
 }
 
-void nl::Renderer::freeCommandBuffers() {
+void Renderer::freeCommandBuffers() {
 	vkFreeCommandBuffers(
 		_device.device(),
 		_device.getCommandPool(),
@@ -61,7 +65,7 @@ void nl::Renderer::freeCommandBuffers() {
 	_commandBuffers.clear();
 }
 
-VkCommandBuffer nl::Renderer::beginFrame() {
+VkCommandBuffer Renderer::beginFrame() {
 	assert(!_frameStarted);
 
 	auto result = _swapChain->acquireNextImage(&_currentImageIndex);
@@ -89,7 +93,7 @@ VkCommandBuffer nl::Renderer::beginFrame() {
 	return commandBuffer;
 }
 
-void nl::Renderer::endFrame() {
+void Renderer::endFrame() {
 	assert(_frameStarted);
 
 	auto commandBuffer = getCurrentcommandBuffer();
@@ -108,9 +112,10 @@ void nl::Renderer::endFrame() {
 	}
 
 	_frameStarted = false;
+	_currentFrameIndex = (_currentFrameIndex + 1) % SwapChain::MAX_FRAMES_IN_FLIGHT;
 }
 
-void nl::Renderer::beginSwapChainRenderPass(VkCommandBuffer commandBuffer) {
+void Renderer::beginSwapChainRenderPass(VkCommandBuffer commandBuffer) {
 	assert(_frameStarted);
 	assert(commandBuffer == getCurrentcommandBuffer());
 
@@ -143,7 +148,7 @@ void nl::Renderer::beginSwapChainRenderPass(VkCommandBuffer commandBuffer) {
 	vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 }
 
-void nl::Renderer::endSwapChainRenderPass(VkCommandBuffer commandBuffer) {
+void Renderer::endSwapChainRenderPass(VkCommandBuffer commandBuffer) {
 	assert(_frameStarted);
 	assert(commandBuffer == getCurrentcommandBuffer());
 	vkCmdEndRenderPass(commandBuffer);

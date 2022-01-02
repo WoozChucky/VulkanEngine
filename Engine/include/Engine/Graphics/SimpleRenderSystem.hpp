@@ -9,11 +9,12 @@
 #include "Engine/Graphics/Device.hpp"
 #include "Engine/Graphics/Model.hpp"
 #include "Engine/Graphics/GameObject.hpp"
+#include "Engine/Graphics/Camera.hpp"
 
 #include <memory>
 #include <vector>
 
-namespace nl {
+namespace nl::gfx {
 
 class SimpleRenderSystem {
 
@@ -25,7 +26,7 @@ class SimpleRenderSystem {
 	SimpleRenderSystem(const SimpleRenderSystem&) = delete;
 	SimpleRenderSystem& operator=(const SimpleRenderSystem&) = delete;
 
-	void renderGameObjects(VkCommandBuffer commandBuffer, std::vector<GameObject> gameObjects);
+	void renderGameObjects(VkCommandBuffer commandBuffer, std::vector<GameObject>& gameObjects, const Camera& camera);
 
  private:
 

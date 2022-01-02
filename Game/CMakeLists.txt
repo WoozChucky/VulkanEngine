@@ -1,11 +1,10 @@
 set(This Game)
 
 set(Headers
-        # src/MainGame.hpp
+
         )
 
 set(Sources
-        # src/MainGame.cpp
         src/main.cpp
         src/Application.cpp
         src/Application.hpp)

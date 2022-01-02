@@ -11,22 +11,23 @@
 
 #include <stdexcept>
 
+using namespace nl::gfx;
+
 struct SimplePushConstantData {
-	glm::mat2 transform{1.f};
-	glm::vec2 offset;
-	alignas(16) glm::vec3 color;
+	glm::mat4 transform{1.f};
+	glm::mat4 normalMatrix{1.f};
 };
 
-nl::SimpleRenderSystem::SimpleRenderSystem(Device& device, VkRenderPass renderPass) : _device{device} {
+SimpleRenderSystem::SimpleRenderSystem(Device& device, VkRenderPass renderPass) : _device{device} {
 	createPipelineLayout();
 	createPipeline(renderPass);
 }
 
-nl::SimpleRenderSystem::~SimpleRenderSystem() {
+SimpleRenderSystem::~SimpleRenderSystem() {
 	vkDestroyPipelineLayout(_device.device(), _pipelineLayout, nullptr);
 }
 
-void nl::SimpleRenderSystem::createPipelineLayout() {
+void SimpleRenderSystem::createPipelineLayout() {
 
 	VkPushConstantRange pushConstantRange;
 	pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -45,10 +46,10 @@ void nl::SimpleRenderSystem::createPipelineLayout() {
 	}
 }
 
-void nl::SimpleRenderSystem::createPipeline(VkRenderPass renderPass) {;
+void SimpleRenderSystem::createPipeline(VkRenderPass renderPass) {;
 	assert(_pipelineLayout != nullptr);
 
-	nl::PipelineConfigInfo pipelineConfig{};
+	PipelineConfigInfo pipelineConfig{};
 
 	Pipeline::defaultPipelineConfigInfo(pipelineConfig);
 
@@ -62,17 +63,17 @@ void nl::SimpleRenderSystem::createPipeline(VkRenderPass renderPass) {;
 
 }
 
-void nl::SimpleRenderSystem::renderGameObjects(VkCommandBuffer commandBuffer, std::vector<GameObject> gameObjects) {
+void SimpleRenderSystem::renderGameObjects(VkCommandBuffer commandBuffer, std::vector<GameObject>& gameObjects, const Camera& camera) {
 
 	_pipeline->bind(commandBuffer);
 
-	for(auto& obj : gameObjects) {
-		obj.transform2d.rotation = glm::mod(obj.transform2d.rotation + .01f, glm::two_pi<R32>());
+	auto projectionView = camera.getProjection() * camera.getView();
 
+	for(auto& obj : gameObjects) {
 		SimplePushConstantData push{};
-		push.offset =obj.transform2d.translation;
-		push.color = obj.color;
-		push.transform = obj.transform2d.mat2();
+		auto modelMatrix = obj.transform.mat4();
+		push.transform = projectionView * modelMatrix;
+		push.normalMatrix = obj.transform.normalMatrix();
 
 		vkCmdPushConstants(commandBuffer,
 						   _pipelineLayout,

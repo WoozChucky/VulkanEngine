@@ -7,17 +7,19 @@
 #include <utility>
 #include <stdexcept>
 
-nl::Window::Window(S32 w, S32 h, std::string name):
+using namespace nl::gfx;
+
+Window::Window(S32 w, S32 h, std::string name):
 	height(h), width(w), windowName(std::move(name)), _window(nullptr) {
 	initWindow();
 }
 
-nl::Window::~Window() {
+Window::~Window() {
 	glfwDestroyWindow(_window);
 	glfwTerminate();
 }
 
-void nl::Window::initWindow() {
+void Window::initWindow() {
 	glfwInit();
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
@@ -27,14 +29,14 @@ void nl::Window::initWindow() {
 	glfwSetFramebufferSizeCallback(_window, frameBufferResized);
 }
 
-void nl::Window::createWindowSurface(VkInstance instance, VkSurfaceKHR* surface) {
+void Window::createWindowSurface(VkInstance instance, VkSurfaceKHR* surface) {
 	if (glfwCreateWindowSurface(instance, _window, nullptr, surface) != VK_SUCCESS) {
 		throw std::runtime_error("Failed to create window surface");
 	}
 
 }
 
-void nl::Window::frameBufferResized(GLFWwindow *window, int width, int height) {
+void Window::frameBufferResized(GLFWwindow *window, int width, int height) {
 
 	auto selfWindow = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
 

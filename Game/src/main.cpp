@@ -5,10 +5,7 @@ int main(int argc, char **argv) {
 
 	Environment::init();
 
-	uint32_t extensionCount = 0;
-	vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
-
-	nl::Application app {};
+	Application app {};
 
 	try {
 		app.run();

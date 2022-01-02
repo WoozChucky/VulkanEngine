@@ -8,7 +8,7 @@
 #include <Engine/Graphics/Device.hpp>
 #include <string>
 
-namespace nl {
+namespace nl::gfx {
 
 struct PipelineConfigInfo {
 

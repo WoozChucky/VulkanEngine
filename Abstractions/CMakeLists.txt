@@ -6,6 +6,7 @@ set(Headers
         include/Abstractions/Logger.hpp
         include/Abstractions/LogCategory.hpp
         include/Abstractions/Environment.hpp
+        include/Abstractions/Utils.hpp
         )
 
 set(Sources

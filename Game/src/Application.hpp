@@ -14,8 +14,6 @@
 #include <memory>
 #include <vector>
 
-namespace nl {
-
 class Application {
 
  public:
@@ -34,15 +32,11 @@ class Application {
  private:
 	void loadGameObjects();
 
-	Window _window {WIDTH, HEIGHT, "Vulkan Practises"};
-	Device _device {_window};
-	Renderer _renderer{_window, _device};
+	nl::gfx::Window _window {WIDTH, HEIGHT, "Vulkan Practises"};
+	nl::gfx::Device _device {_window};
+	nl::gfx::Renderer _renderer{_window, _device};
 
-	std::vector<GameObject> gameObjects;
+	std::vector<nl::gfx::GameObject> gameObjects{};
 };
-
-
-}
-
 
 #endif //GL_GAME_SRC_APPLICATION_HPP_

@@ -9,22 +9,24 @@
 #include "Abstractions/Environment.hpp"
 #include "Engine/Graphics/Model.hpp"
 
-nl::Pipeline::Pipeline(Device& device, const std::string &vertexFilePath, const std::string &fragmentFilePath, const PipelineConfigInfo& config)
+using namespace nl::gfx;
+
+Pipeline::Pipeline(Device& device, const std::string &vertexFilePath, const std::string &fragmentFilePath, const PipelineConfigInfo& config)
 	: _device(device), _fragShaderModule(nullptr), _vertShaderModule(nullptr), _graphicsPipeline(nullptr) {
 	createGraphicsPipeline(vertexFilePath, fragmentFilePath, config);
 }
 
-nl::Pipeline::~Pipeline() {
+Pipeline::~Pipeline() {
 	vkDestroyShaderModule(_device.device(), _vertShaderModule, nullptr);
 	vkDestroyShaderModule(_device.device(), _fragShaderModule, nullptr);
 	vkDestroyPipeline(_device.device(), _graphicsPipeline, nullptr);
 }
 
-void nl::Pipeline::bind(VkCommandBuffer commandBuffer) {
+void Pipeline::bind(VkCommandBuffer commandBuffer) {
 	vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, _graphicsPipeline);
 }
 
-void nl::Pipeline::createGraphicsPipeline(const std::string &vertexFilePath, const std::string &fragmentFilePath, const PipelineConfigInfo& config) {
+void Pipeline::createGraphicsPipeline(const std::string &vertexFilePath, const std::string &fragmentFilePath, const PipelineConfigInfo& config) {
 
 	assert(config.pipelineLayout != VK_NULL_HANDLE);
 	assert(config.renderPass != VK_NULL_HANDLE);
@@ -64,8 +66,8 @@ void nl::Pipeline::createGraphicsPipeline(const std::string &vertexFilePath, con
 	shaderStages[1].pNext = nullptr;
 	shaderStages[1].pSpecializationInfo = nullptr;
 
-	auto bindingDescriptions = nl::Model::Vertex::getBindingDescriptions();
-	auto attributeDescriptions = nl::Model::Vertex::getAttributeDescriptions();
+	auto bindingDescriptions = Model::Vertex::getBindingDescriptions();
+	auto attributeDescriptions = Model::Vertex::getAttributeDescriptions();
 
 
 	VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
@@ -118,7 +120,7 @@ void nl::Pipeline::createGraphicsPipeline(const std::string &vertexFilePath, con
 	}
 }
 
-void nl::Pipeline::createShaderModule(const std::vector<U8>& code, VkShaderModule *shaderModule) {
+void Pipeline::createShaderModule(const std::vector<U8>& code, VkShaderModule *shaderModule) {
 
 	VkShaderModuleCreateInfo createInfo {};
 	createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
@@ -130,7 +132,7 @@ void nl::Pipeline::createShaderModule(const std::vector<U8>& code, VkShaderModul
 	}
 }
 
-void nl::Pipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo) {
+void Pipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo) {
 
 	configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 	configInfo.inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;

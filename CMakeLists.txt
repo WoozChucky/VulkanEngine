@@ -69,6 +69,7 @@ if(ParentDirectory STREQUAL "")
     include_directories(C:\\VulkanSDK\\1.2.198.1\\Include)
     include_directories(deps/glm)
     include_directories(deps/glfw/include)
+    include_directories(deps/tinyObjLoader)
 
     add_subdirectory(Abstractions)
     add_subdirectory(AMQP)

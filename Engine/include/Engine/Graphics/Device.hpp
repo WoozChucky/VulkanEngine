@@ -9,7 +9,7 @@
 #include <vector>
 #include <Engine/Graphics/Window.hpp>
 
-namespace nl {
+namespace nl::gfx {
 
 struct SwapChainSupportDetails {
 	VkSurfaceCapabilitiesKHR capabilities;
