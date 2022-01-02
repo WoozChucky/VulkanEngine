@@ -16,3 +16,5 @@ cmake-build-debug/
 
 cmake-build-release/
 /out/
+
+.vs/
