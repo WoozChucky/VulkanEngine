@@ -16,6 +16,7 @@ struct FrameInfo {
 	R32 frameTime;
 	VkCommandBuffer buffer;
 	Camera& camera;
+	VkDescriptorSet globalDescriptorSet;
 };
 
 }

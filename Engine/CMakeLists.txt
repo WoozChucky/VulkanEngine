@@ -1,39 +1,9 @@
 
 set(This Engine)
 
-set(Headers
-        # Graphics headers
-        include/Engine/Graphics/Window.hpp
-        include/Engine/Graphics/Pipeline.hpp
-        include/Engine/Graphics/Device.hpp
-        include/Engine/Graphics/SwapChain.hpp
-        include/Engine/Graphics/Model.hpp
-        include/Engine/Graphics/GameObject.hpp
-        include/Engine/Graphics/Renderer.hpp
-        include/Engine/Graphics/SimpleRenderSystem.hpp
-        include/Engine/Graphics/Camera.hpp
-        include/Engine/Graphics/Buffer.hpp
-        include/Engine/Graphics/FrameInfo.hpp
-        # Input headers
-        include/Engine/Input/IOManager.hpp
-        include/Engine/Input/KeyboardMovementController.hpp
-        )
+file(GLOB_RECURSE Headers include/*.hpp)
 
-set(Sources
-        src/Graphics/Window.cpp
-        src/Graphics/Pipeline.cpp
-        src/Graphics/Device.cpp
-        src/Graphics/SwapChain.cpp
-        src/Graphics/Model.cpp
-        src/Graphics/GameObject.cpp
-        src/Graphics/Renderer.cpp
-        src/Graphics/SimpleRenderSystem.cpp
-        src/Graphics/Camera.cpp
-        src/Graphics/Buffer.cpp
-
-        src/Input/IOManager.cpp
-        src/Input/KeyboardMovementController.cpp
-        )
+file(GLOB_RECURSE Sources src/*.cpp)
 
 include_directories(../Abstractions)
 

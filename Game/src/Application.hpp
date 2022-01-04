@@ -10,6 +10,7 @@
 #include "Engine/Graphics/Device.hpp"
 #include "Engine/Graphics/Model.hpp"
 #include "Engine/Graphics/GameObject.hpp"
+#include "Engine/Graphics/Descriptors.hpp"
 
 #include <memory>
 #include <vector>
@@ -36,6 +37,7 @@ class Application {
 	nl::gfx::Device _device {_window};
 	nl::gfx::Renderer _renderer{_window, _device};
 
+	std::unique_ptr<nl::gfx::DescriptorPool> _globalPool{};
 	std::vector<nl::gfx::GameObject> gameObjects{};
 };
 

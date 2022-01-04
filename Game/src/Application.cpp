@@ -18,6 +18,10 @@ struct GlobalUbo {
 };
 
 Application::Application() {
+	_globalPool = nl::gfx::DescriptorPool::Builder(_device)
+		.setMaxSets(nl::gfx::SwapChain::MAX_FRAMES_IN_FLIGHT)
+		.addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, nl::gfx::SwapChain::MAX_FRAMES_IN_FLIGHT)
+		.build();
 	loadGameObjects();
 }
 
@@ -38,7 +42,23 @@ void Application::run() {
 		uboBuffers[i]->map();
 	}
 
-	nl::gfx::SimpleRenderSystem simpleRenderSystem(_device, _renderer.getSwapChainRenderPass());
+	auto globalSetLayout = nl::gfx::DescriptorSetLayout::Builder(_device)
+		.addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT)
+		.build();
+
+	std::vector<VkDescriptorSet> globalDescriptorSets(nl::gfx::SwapChain::MAX_FRAMES_IN_FLIGHT);
+	for (int i = 0; i < globalDescriptorSets.size(); ++i) {
+		auto bufferInfo = uboBuffers[i]->descriptorInfo();
+		nl::gfx::DescriptorWriter(*globalSetLayout, *_globalPool)
+		.writeBuffer(0, &bufferInfo)
+		.build(globalDescriptorSets[i]);
+	}
+
+	nl::gfx::SimpleRenderSystem simpleRenderSystem(
+		_device,
+		_renderer.getSwapChainRenderPass(),
+		globalSetLayout->getDescriptorSetLayout()
+	);
 	nl::gfx::Camera camera{};
 
 	auto viewerObject = nl::gfx::GameObject::createGameObject();
@@ -67,7 +87,8 @@ void Application::run() {
 				frameIndex,
 				frameTime,
 				commandBuffer,
-				camera
+				camera,
+				globalDescriptorSets[frameIndex]
 			};
 
 			// Update Game Objects
