@@ -10,6 +10,7 @@
 #include "Model.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <unordered_map>
 
 namespace nl::gfx {
 
@@ -28,6 +29,7 @@ class GameObject {
 
  public:
 	using id_t = U32;
+	using Map = std::unordered_map<id_t, GameObject>;
 
 	static GameObject createGameObject() {
 

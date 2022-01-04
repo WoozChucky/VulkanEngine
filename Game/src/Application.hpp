@@ -38,7 +38,7 @@ class Application {
 	nl::gfx::Renderer _renderer{_window, _device};
 
 	std::unique_ptr<nl::gfx::DescriptorPool> _globalPool{};
-	std::vector<nl::gfx::GameObject> gameObjects{};
+	nl::gfx::GameObject::Map gameObjects;
 };
 
 #endif //GL_GAME_SRC_APPLICATION_HPP_

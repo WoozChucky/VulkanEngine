@@ -17,6 +17,7 @@ struct FrameInfo {
 	VkCommandBuffer buffer;
 	Camera& camera;
 	VkDescriptorSet globalDescriptorSet;
+	GameObject::Map &gameObjects;
 };
 
 }

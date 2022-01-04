@@ -3,6 +3,7 @@
 //
 
 #include "Engine/Graphics/Window.hpp"
+#include "Abstractions/Environment.hpp"
 
 #include <utility>
 #include <stdexcept>
