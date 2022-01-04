@@ -12,6 +12,11 @@
 #include "Engine/Graphics/Camera.hpp"
 #include "Engine/Input/KeyboardMovementController.hpp"
 
+struct GlobalUbo {
+	glm::mat4 projectionView {1.f};
+	glm::vec3 lightDirection = glm::normalize(glm::vec3{1.f, -3.f, -1.f});
+};
+
 Application::Application() {
 	loadGameObjects();
 }
@@ -19,6 +24,19 @@ Application::Application() {
 Application::~Application() { }
 
 void Application::run() {
+
+	std::vector<std::unique_ptr<nl::gfx::Buffer>> uboBuffers(nl::gfx::SwapChain::MAX_FRAMES_IN_FLIGHT);
+
+	for (int i = 0; i < uboBuffers.size(); ++i) {
+		uboBuffers[i] = std::make_unique<nl::gfx::Buffer>(
+			_device,
+			sizeof(GlobalUbo),
+			1,
+			VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+		);
+		uboBuffers[i]->map();
+	}
 
 	nl::gfx::SimpleRenderSystem simpleRenderSystem(_device, _renderer.getSwapChainRenderPass());
 	nl::gfx::Camera camera{};
@@ -44,11 +62,23 @@ void Application::run() {
 		camera.setPerspectiveProjection(glm::radians(50.0f), aspect, 0.1f, 100.0f);
 
 		if (auto commandBuffer = _renderer.beginFrame()) {
+			S32 frameIndex = _renderer.getFrameIndex();
+			nl::gfx::FrameInfo frameInfo {
+				frameIndex,
+				frameTime,
+				commandBuffer,
+				camera
+			};
 
+			// Update Game Objects
+			GlobalUbo ubo {};
+			ubo.projectionView = camera.getProjection() * camera.getView();
+			uboBuffers[frameIndex]->writeToBuffer(&ubo);
+			uboBuffers[frameIndex]->flush();
+
+			// Render Game Objects
 			_renderer.beginSwapChainRenderPass(commandBuffer);
-
-			simpleRenderSystem.renderGameObjects(commandBuffer, gameObjects, camera);
-
+			simpleRenderSystem.renderGameObjects(frameInfo, gameObjects);
 			_renderer.endSwapChainRenderPass(commandBuffer);
 			_renderer.endFrame();
 		}

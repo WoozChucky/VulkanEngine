@@ -6,6 +6,7 @@
 #define GL_ENGINE_INCLUDE_ENGINE_GRAPHICS_MODEL_HPP_
 
 #include "Device.hpp"
+#include "Buffer.hpp"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -61,14 +62,12 @@ class Model {
 
 	Device& _device;
 
- 	VkBuffer _vertexBuffer;
-	VkDeviceMemory _vertexBufferMemory;
+	std::unique_ptr<Buffer> _vertexBuffer;
 	U32 _vertexCount;
 
 	bool _hasIndexBuffer = false;
 
-	VkBuffer _indexBuffer;
-	VkDeviceMemory _indexBufferMemory;
+	std::unique_ptr<Buffer> _indexBuffer;
 	U32 _indexCount;
 };
 

@@ -12,6 +12,8 @@ set(Headers
         include/Engine/Graphics/Renderer.hpp
         include/Engine/Graphics/SimpleRenderSystem.hpp
         include/Engine/Graphics/Camera.hpp
+        include/Engine/Graphics/Buffer.hpp
+        include/Engine/Graphics/FrameInfo.hpp
         # Input headers
         include/Engine/Input/IOManager.hpp
         include/Engine/Input/KeyboardMovementController.hpp
@@ -27,6 +29,7 @@ set(Sources
         src/Graphics/Renderer.cpp
         src/Graphics/SimpleRenderSystem.cpp
         src/Graphics/Camera.cpp
+        src/Graphics/Buffer.cpp
 
         src/Input/IOManager.cpp
         src/Input/KeyboardMovementController.cpp

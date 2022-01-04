@@ -10,6 +10,7 @@
 #include "Engine/Graphics/Model.hpp"
 #include "Engine/Graphics/GameObject.hpp"
 #include "Engine/Graphics/Camera.hpp"
+#include "FrameInfo.hpp"
 
 #include <memory>
 #include <vector>
@@ -26,7 +27,7 @@ class SimpleRenderSystem {
 	SimpleRenderSystem(const SimpleRenderSystem&) = delete;
 	SimpleRenderSystem& operator=(const SimpleRenderSystem&) = delete;
 
-	void renderGameObjects(VkCommandBuffer commandBuffer, std::vector<GameObject>& gameObjects, const Camera& camera);
+	void renderGameObjects(FrameInfo& frameInfo, std::vector<GameObject>& gameObjects);
 
  private:
 
